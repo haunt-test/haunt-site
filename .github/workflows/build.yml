@@ -20,7 +20,8 @@ jobs:
       run: |
        dnf -y copr enable fed500/haunt
        dnf -y update
-       dnf --refresh -y install haunt guile-reader-devel guile-commonmark guile30-devel gcc diffutils awk autoconf automake make tar texinfo
+       dnf --refresh -y install autoconf automake awk diffutils gcc guile30-devel guile-commonmark
+       dnf -y install guile-reader-devel haunt make tar texinfo
     - name: build site
       run: haunt build
     - name: Upload static files as artifact
