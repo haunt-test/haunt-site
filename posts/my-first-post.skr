@@ -9,8 +9,8 @@
 
 (p [The source is written in Skribe, a
     document format that allows you to use
-    embed scheme programs to create your
-    document.])
+    embedded scheme programs to create your
+    final document.])
 
 (p [1 + 2 + 3 = ]
    (+ 1 2 3 )))
