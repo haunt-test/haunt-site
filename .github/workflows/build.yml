@@ -14,6 +14,7 @@ jobs:
       image: fedora:rawhide
     permissions:
       contents: write
+      pages: write      # to deploy to Pages
       id-token: write   # to verify the deployment originates from an appropriate source
       
     steps:
@@ -23,31 +24,12 @@ jobs:
       run: |
        dnf -y copr enable fed500/haunt
        dnf -y update
-       dnf --refresh -y install autoconf automake awk diffutils gcc guile30-devel guile-commonmark
+       dnf -y install autoconf automake awk diffutils gcc guile30-devel guile-commonmark
        dnf -y install guile-reader-devel haunt make tar texinfo
     - name: build site
       run: haunt build
-    - name: Upload static files as artifact
-      id: deployment
-      uses: actions/upload-pages-artifact@v3
+    - name: Deploy to GH Pages
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        path: docs/
-
-  # Deployment job
-  deploy:
-    permissions:
-      contents: read
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    if: ${{ github.event.pull_request.merged == true }}
-    steps:
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs
